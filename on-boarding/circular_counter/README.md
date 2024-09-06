@@ -17,4 +17,4 @@ samples, guidance on mobile development, and a full API reference.
 
 ## App Screenshot
 
-![Screenshot](screenshots/app-screenshot.png)
+![Screenshot (72)](https://github.com/user-attachments/assets/f85b4073-0c2e-4447-bcd8-6404fbec111d)
