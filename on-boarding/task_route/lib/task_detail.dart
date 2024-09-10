@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TaskDetail extends StatelessWidget {
-  const TaskDetail({super.key});
+  final Map<String, dynamic>?
+      task; // This should match the type you are passing
+
+  const TaskDetail({Key? key, this.task}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (task == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Task Detail'),
+        ),
+        body: const Center(child: Text('No task data available')),
+      );
+    }
+
+    final type = task!['Type'] ?? 'No Type';
+    final title = task!['Title'] ?? 'No Title';
+    final dueDate = task!['Due Date'] != null
+        ? DateFormat('MMMM d, yyyy').format(task!['Due Date'])
+        : 'No Date';
+    final color = task!['Color'] ?? Colors.grey;
+    final description = task!['Description'] ?? 'No Description';
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -51,9 +72,9 @@ class TaskDetail extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: Text(
-                'Title',
+                'Type',
                 style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
               ),
             ),
@@ -65,11 +86,11 @@ class TaskDetail extends StatelessWidget {
                   color: Colors.black12,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'UI/UX App Design',
-                    style: TextStyle(fontSize: 14),
+                    '$title',
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
               ),
@@ -91,11 +112,11 @@ class TaskDetail extends StatelessWidget {
                   color: Colors.black12,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "First I have to animate the logo and prototyping my design. It's very important",
-                    style: TextStyle(fontSize: 14),
+                    "$description",
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
               ),
@@ -116,11 +137,11 @@ class TaskDetail extends StatelessWidget {
                   color: Colors.black12,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'April, 29, 2023',
-                    style: TextStyle(fontSize: 14),
+                    dueDate,
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
               ),

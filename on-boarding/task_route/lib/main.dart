@@ -22,8 +22,12 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => const MyHomePage());
           case '/add_task':
             return SlidePageRoute(page: CreateNewTaskPage());
-          case '/task_detail':
-            return SlidePageRoute(page: const TaskDetail());
+          case '/taskDetail':
+            final arguments = settings.arguments as Map<String, dynamic>?;
+            return SlidePageRoute(
+              page: TaskDetail(
+                  task: arguments), // Pass arguments to the TaskDetail page
+            );
           default:
             return MaterialPageRoute(builder: (context) => const MyHomePage());
         }
@@ -42,28 +46,37 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Map<String, dynamic>> items = [
     {
+      'Id': 1,
       'Type': 'U',
       'Title': 'UI/UX App Design',
       'Due Date': DateTime(2024, 9, 15),
-      'Color': Colors.red
+      'Color': Colors.red,
+      'Description': 'Design the user interface and experience for the new app.'
     },
     {
+      'Id': 2,
       'Type': 'U',
       'Title': 'UI/UX App Design',
       'Due Date': DateTime(2024, 9, 20),
-      'Color': Colors.blue
+      'Color': Colors.blue,
+      'Description': 'Refine the design and finalize the user experience.'
     },
     {
+      'Id': 3,
       'Type': 'V',
       'Title': 'View Candidates',
       'Due Date': DateTime(2024, 10, 5),
-      'Color': Colors.green
+      'Color': Colors.green,
+      'Description':
+          'Review the list of job candidates and prepare for interviews.'
     },
     {
+      'Id': 4,
       'Type': 'F',
-      'Title': 'Footbal Cu Drybling',
+      'Title': 'Football Dribbling',
       'Due Date': DateTime(2024, 10, 10),
-      'Color': Colors.orange
+      'Color': Colors.orange,
+      'Description': 'Practice dribbling techniques and improve ball control.'
     },
   ];
 
@@ -110,93 +123,96 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontWeight: FontWeight.bold)),
             ),
             Expanded(
-              child: ListView(
-                children: items
-                    .map((item) => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/task_detail');
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.all(16),
-
-                              backgroundColor: Colors.white, // Background color
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(20), // Border radius
-                              ),
-                              elevation:
-                                  5, // Similar to the shadow in the Container
-                              shadowColor: Colors.grey.withOpacity(0.2),
-                            ),
+              child: ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/taskDetail',
+                          arguments: item,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(16),
+                        backgroundColor: Colors.white, // Background color
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(20), // Border radius
+                        ),
+                        elevation: 5, // Similar to the shadow in the Container
+                        shadowColor: Colors.grey.withOpacity(0.2),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Text(item['Type'],
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black54)),
-                                      const SizedBox(width: 16),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: 100,
-                                            child: Text(item['Title'],
-                                                style: const TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.black87)),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Row(
+                                Text(item['Type'],
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black54)),
+                                const SizedBox(width: 16),
+                                Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: Text(
-                                          DateFormat('MMMM d, yyyy')
-                                              .format(item['Due Date']),
+                                    SizedBox(
+                                      width: 100,
+                                      child: Text(item['Title'],
                                           style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w800)),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black87)),
                                     ),
-                                    const SizedBox(height: 8),
-                                    Container(
-                                      width: 3,
-                                      height: 34,
-                                      decoration: BoxDecoration(
-                                        color: item['Color'],
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: item['Color']!.withOpacity(
-                                                0.5), // Adjust opacity for shadow effect
-                                            spreadRadius: 1,
-                                            blurRadius: 2,
-                                            offset: const Offset(
-                                                1, 1), // Shadow position
-                                          ),
-                                        ],
-                                      ),
-                                    )
                                   ],
                                 ),
                               ],
                             ),
                           ),
-                        ))
-                    .toList(),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Text(
+                                    DateFormat('MMMM d, yyyy')
+                                        .format(item['Due Date']),
+                                    style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w800)),
+                              ),
+                              const SizedBox(height: 8),
+                              Container(
+                                width: 3,
+                                height: 34,
+                                decoration: BoxDecoration(
+                                  color: item['Color'],
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: item['Color']!.withOpacity(
+                                          0.5), // Adjust opacity for shadow effect
+                                      spreadRadius: 1,
+                                      blurRadius: 2,
+                                      offset:
+                                          const Offset(1, 1), // Shadow position
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
             Center(
