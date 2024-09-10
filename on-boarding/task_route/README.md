@@ -1,16 +1,30 @@
-# task_route
+# Task Manager App - Routing Focus
 
-A new Flutter project.
+This Flutter application demonstrates routing between different screens with smooth transitions and named routes. The app's primary focus is on implementing and managing navigation between screens.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+1. **Screen Navigation**:
 
-A few resources to get you started if this is your first Flutter project:
+   - Navigate between the home screen, add task screen, and edit task screen using Flutter’s built-in navigation methods.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. **Named Routes**:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+   - Each screen is accessible through named routes, ensuring a well-structured and easily maintainable navigation flow.
+
+3. **Passing Data Between Screens**:
+
+   - Task data (title and description) is passed between the screens, demonstrating how to manage data during navigation.
+
+4. **Navigation Animations**:
+
+   - Implemented smooth and responsive transitions between screens to improve user experience.
+
+5. **Handling Navigation Events**:
+   - Proper back button handling and other navigation events ensure the app behaves as expected when transitioning between screens.
+
+## Demo
+
+Check out the demo video on Loom:
+
+[![Watch the video](https://www.loom.com/embed/9757a3cd5c7540a198fd975b258ad03a)](https://www.loom.com/share/9757a3cd5c7540a198fd975b258ad03a)
