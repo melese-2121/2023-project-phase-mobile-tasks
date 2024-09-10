@@ -474,7 +474,9 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFEE6F57)),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context); // Navigate back
+                      },
                       child: const Text('Add Task',
                           style: TextStyle(
                               color: Colors.white,
