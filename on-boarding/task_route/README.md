@@ -27,4 +27,6 @@ This Flutter application demonstrates routing between different screens with smo
 
 Check out the demo video on Loom:
 
-[![Watch the video](https://www.loom.com/embed/9757a3cd5c7540a198fd975b258ad03a)](https://www.loom.com/share/9757a3cd5c7540a198fd975b258ad03a)
+<a href="https://www.loom.com/share/9757a3cd5c7540a198fd975b258ad03a">
+  <img src="./assets/demo-thumbnail.png" alt="Watch the video" width="400" height="250" />
+</a>
