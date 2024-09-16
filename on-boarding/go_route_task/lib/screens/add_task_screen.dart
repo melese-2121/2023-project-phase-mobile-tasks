@@ -1,84 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class CreateNewTaskScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Add Task',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
-    );
-  }
+  _CreateNewTaskScreenState createState() => _CreateNewTaskScreenState();
 }
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: const Color(0xFFEE6F57),
-        child: Column(
-          children: [
-            Expanded(
-              child: Center(
-                child: Image.asset(
-                  'assets/stick-man-painting-on-canvas.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: SizedBox(
-                width: 160.0,
-                height: 35.0,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreateNewTaskPage(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0C8CE9),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(3.0),
-                    ),
-                  ),
-                  child: const Text('Get Started',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14)),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CreateNewTaskPage extends StatefulWidget {
-  @override
-  _CreateNewTaskPageState createState() => _CreateNewTaskPageState();
-}
-
-class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
+class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
   String? _selectedTask;
   DateTime? _selectedDate;
   final TextEditingController _descriptionController = TextEditingController();

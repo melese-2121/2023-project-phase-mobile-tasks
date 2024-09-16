@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+class ViewEditScreen extends StatelessWidget {
+  final String id;
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const ViewEditScreen({Key? key, required this.id}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    print(id);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(Icons.chevron_left,
-                size: 37, color: Color(0xFFEE6F57)),
-            onPressed: () => Navigator.pop(context),
-          ),
           title: const Text(
             'Task Detail',
             style: TextStyle(
