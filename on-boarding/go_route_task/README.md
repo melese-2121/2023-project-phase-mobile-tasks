@@ -57,7 +57,7 @@ To run the app on your local machine, follow these steps:
 
 ## Demo Video
 
-[<img src="https://www.pngmart.com/files/1/Video-Icon-PNG-File.png" width="100" height="100" />](https://www.loom.com/share/21f9794107bd4b27a7d4b6611659b92d?sid=c84ba482-a8fb-49ed-8023-f57d2a79b65f)
+[<img src="https://www.pngmart.com/files/1/Video-Icon-PNG-File.png" width="150" height="150" />](https://www.loom.com/share/21f9794107bd4b27a7d4b6611659b92d?sid=c84ba482-a8fb-49ed-8023-f57d2a79b65f)
 
 ## Additional Information for Reviewers
 
@@ -72,7 +72,7 @@ To run the app on your local machine, follow these steps:
 - **Screens**:
   - **Home Screen** (`lib/screens/home_screen.dart`): Displays tasks and provides navigation to add/edit tasks.
   - **Add Task Screen** (`lib/screens/add_task_screen.dart`): Form for adding new tasks.
-  - **View Edit Task Screen** (`lib/screens/edit_task_screen.dart`): Form for editing existing tasks.
+  - **View Edit Task Screen** (`lib/screens/view_edit_screen.dart`): Form for editing existing tasks.
 
 Feel free to explore the `go_router` setup and how it integrates with the app’s navigation flow.
 
