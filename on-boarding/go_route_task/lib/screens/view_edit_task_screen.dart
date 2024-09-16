@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class ViewEditScreen extends StatelessWidget {
   final String id;
+  final Map<String, dynamic> item;
 
-  const ViewEditScreen({Key? key, required this.id}) : super(key: key);
+  const ViewEditScreen({Key? key, required this.id, required this.item})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print(id);
+    final DateFormat dateFormat = DateFormat('MMMM d, yyyy');
+    final String formattedDate =
+        dateFormat.format(item['Due Date'] as DateTime);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black54),
+            onPressed: () {
+              context.goNamed('home');
+            },
+          ),
           title: const Text(
             'Task Detail',
             style: TextStyle(
@@ -23,7 +36,9 @@ class ViewEditScreen extends StatelessWidget {
           centerTitle: true,
           actions: <Widget>[
             PopupMenuButton<String>(
-              onSelected: (value) {},
+              onSelected: (value) {
+                // Handle menu selection
+              },
               itemBuilder: (context) => <String>[
                 'Option 1',
                 'Option 2',
@@ -31,7 +46,8 @@ class ViewEditScreen extends StatelessWidget {
                   .map((choice) =>
                       PopupMenuItem(value: choice, child: Text(choice)))
                   .toList(),
-              icon: const Icon(Icons.more_vert, size: 30),
+              icon:
+                  const Icon(Icons.more_vert, size: 30, color: Colors.black54),
             ),
           ],
         ),
@@ -62,11 +78,11 @@ class ViewEditScreen extends StatelessWidget {
                   color: Colors.black12,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'UI/UX App Design',
-                    style: TextStyle(fontSize: 14),
+                    item["Title"],
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
               ),
@@ -88,11 +104,11 @@ class ViewEditScreen extends StatelessWidget {
                   color: Colors.black12,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "First I have to animate the logo and prototyping my design. It's very important",
-                    style: TextStyle(fontSize: 14),
+                    item["Description"],
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
               ),
@@ -113,11 +129,11 @@ class ViewEditScreen extends StatelessWidget {
                   color: Colors.black12,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'April, 29, 2023',
-                    style: TextStyle(fontSize: 14),
+                    formattedDate,
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
               ),
