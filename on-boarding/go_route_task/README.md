@@ -40,9 +40,8 @@ To run the app on your local machine, follow these steps:
 2. **Navigate to the Project Directory**:
 
    ```bash
-   cd 2023-project-phase-mobile-tasks
-   cd on-boarding
-   cd go_route_task
+   cd 2023-project-phase-mobile-tasks/on-boarding/go_route_task
+
    ```
 
 3. **Install Dependencies**:
@@ -56,9 +55,9 @@ To run the app on your local machine, follow these steps:
    flutter run
    ```
 
-## Demo
+## Demo Video
 
-[![Watch the demo](https://www.pngmart.com/files/1/Video-Icon-PNG-File.png)](https://www.loom.com/share/21f9794107bd4b27a7d4b6611659b92d?sid=c84ba482-a8fb-49ed-8023-f57d2a79b65f)
+[<img src="https://www.pngmart.com/files/1/Video-Icon-PNG-File.png" width="100" height="100" />](https://www.loom.com/share/21f9794107bd4b27a7d4b6611659b92d?sid=c84ba482-a8fb-49ed-8023-f57d2a79b65f)
 
 ## Additional Information for Reviewers
 
