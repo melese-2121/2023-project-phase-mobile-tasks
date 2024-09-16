@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateNewTaskScreen extends StatefulWidget {
   @override
@@ -44,6 +45,12 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black54),
+          onPressed: () {
+            context.goNamed('home');
+          },
+        ),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {},
@@ -235,7 +242,9 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFEE6F57)),
-                      onPressed: () {},
+                      onPressed: () {
+                        context.goNamed('home');
+                      },
                       child: const Text('Add Task',
                           style: TextStyle(
                               color: Colors.white,
