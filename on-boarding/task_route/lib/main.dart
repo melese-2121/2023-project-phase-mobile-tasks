@@ -454,6 +454,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextFormField(
+                    key: const Key("taskInputField"),
                     controller: _descriptionController,
                     maxLines: 2,
                     style: const TextStyle(
@@ -472,6 +473,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                   child: SizedBox(
                     width: 150,
                     child: ElevatedButton(
+                      key: const Key("addButton"),
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFEE6F57)),
                       onPressed: () {
