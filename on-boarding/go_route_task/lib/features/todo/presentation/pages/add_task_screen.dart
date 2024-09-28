@@ -11,6 +11,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
   String? _selectedTask;
   DateTime? _selectedDate;
   final TextEditingController _descriptionController = TextEditingController();
+  bool _isCompleted = false; // Add this to handle task completion
 
   final List<String> _tasks = [
     'UI/UX App Design',
@@ -33,6 +34,33 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
     }
   }
 
+  void _addTask() {
+    if (_selectedTask != null &&
+        _selectedDate != null &&
+        _descriptionController.text.isNotEmpty) {
+      // Create the new task including the 'completed' field
+      final newTask = {
+        'Id': DateTime.now().toString(), // Generating a unique ID for the task
+        'Type': 'U', // Assuming the type for now
+        'Title': _selectedTask!,
+        'Due Date': _selectedDate!,
+        'Color': Colors.blue, // You can add a color picker if needed
+        'Description': _descriptionController.text,
+        'Completed': _isCompleted // Add completed status
+      };
+
+      // Pass the task back to the home screen
+      context.pop(newTask);
+    } else {
+      // Show some validation message if the fields are incomplete
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill all the fields'),
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _descriptionController.dispose();
@@ -48,7 +76,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black54),
           onPressed: () {
-            context.goNamed('home');
+            context.pop(); // Go back without adding a task
           },
         ),
         actions: [
@@ -130,7 +158,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
                         hint: const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Text(
-                            'UI/UX App Design',
+                            'Select Task',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 14),
                           ),
@@ -234,6 +262,22 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _isCompleted,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isCompleted = value!;
+                        });
+                      },
+                    ),
+                    const Text('Mark as Completed',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                  ],
+                ),
                 const SizedBox(height: 24),
                 Align(
                   alignment: Alignment.center,
@@ -242,9 +286,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFEE6F57)),
-                      onPressed: () {
-                        context.goNamed('home');
-                      },
+                      onPressed: _addTask,
                       child: const Text('Add Task',
                           style: TextStyle(
                               color: Colors.white,

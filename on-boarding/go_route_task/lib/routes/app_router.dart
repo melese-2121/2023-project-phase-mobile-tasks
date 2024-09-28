@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:go_route_task/screens/add_task_screen.dart';
-import 'package:go_route_task/screens/home_screen.dart';
-import 'package:go_route_task/screens/view_edit_task_screen.dart';
+import 'package:go_route_task/features/todo/presentation/pages/add_task_screen.dart';
+import 'package:go_route_task/features/todo/presentation/pages/home_screen.dart';
+import 'package:go_route_task/features/todo/presentation/pages/view_edit_task_screen.dart';
 
 final GoRouter router = GoRouter(
   routes: [
