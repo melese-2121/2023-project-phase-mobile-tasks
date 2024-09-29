@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'todo-list',
+      title: 'Todo List',
       debugShowCheckedModeBanner: false,
       home: MyHomePage(),
     );
@@ -36,17 +36,17 @@ class _MyHomePageState extends State<MyHomePage> {
       'Color': Colors.red,
       'Description':
           'Design the user interface and user experience for the new app, focusing on usability and aesthetics.',
-      'Completed': false, // New completed field
+      'Completed': false,
     },
     {
       'Id': "2",
       'Type': 'U',
-      'Title': 'UI/UX App Design',
+      'Title': 'Finalize UI/UX Design',
       'Due Date': DateTime(2024, 9, 20),
       'Color': Colors.blue,
       'Description':
-          'Finalize the UI/UX design and prepare assets for development, ensuring all user flows are intuitive.',
-      'Completed': false, // New completed field
+          'Prepare assets for development, ensuring all user flows are intuitive.',
+      'Completed': false,
     },
     {
       'Id': "3",
@@ -55,26 +55,50 @@ class _MyHomePageState extends State<MyHomePage> {
       'Due Date': DateTime(2024, 10, 5),
       'Color': Colors.green,
       'Description':
-          'Review and evaluate job candidates for the open position, focusing on qualifications and fit for the team.',
-      'Completed': false, // New completed field
+          'Review candidates for the open position, focusing on qualifications.',
+      'Completed': false,
     },
     {
       'Id': "4",
       'Type': 'F',
-      'Title': 'Football Dribbling',
+      'Title': 'Football Dribbling Practice',
       'Due Date': DateTime(2024, 10, 10),
       'Color': Colors.orange,
-      'Description':
-          'Practice and improve dribbling skills for the upcoming football match, focusing on control and agility.',
-      'Completed': false, // New completed field
+      'Description': 'Improve dribbling skills for the upcoming match.',
+      'Completed': false,
     },
   ];
 
   void _toggleTaskCompletion(String taskId) {
     setState(() {
-      final task = items.firstWhere((task) => task['Id'] == taskId);
-      task['Completed'] = !task['Completed'];
+      try {
+        // Attempt to find the task and toggle its completion status
+        final task = items.firstWhere((task) => task['Id'] == taskId);
+        task['Completed'] = !task['Completed'];
+      } catch (e) {
+        // Handle error if the task is not found
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error toggling task completion: $e')),
+        );
+      }
     });
+  }
+
+  // Navigate to the CreateTaskScreen and handle the result
+  void _navigateToCreateTaskScreen(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CreateNewTaskScreen(),
+      ),
+    );
+
+    // Check if a new task was added and update the list
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        items.add(result);
+      });
+    }
   }
 
   @override
@@ -83,22 +107,24 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('Todo List',
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.black54,
-                fontWeight: FontWeight.w600)),
+        title: const Text(
+          'Todo List',
+          style: TextStyle(
+              fontSize: 16, color: Colors.black54, fontWeight: FontWeight.w600),
+        ),
         centerTitle: true,
         actions: <Widget>[
           PopupMenuButton<String>(
-            onSelected: (value) {},
-            itemBuilder: (context) => <String>[
-              'Option 1',
-              'Option 2',
-            ]
-                .map((choice) =>
-                    PopupMenuItem(value: choice, child: Text(choice)))
-                .toList(),
+            onSelected: (value) {
+              // Handle selected value from the popup menu
+            },
+            itemBuilder: (context) =>
+                ['Option 1', 'Option 2', 'Option 3'].map((choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList(),
             icon: const Icon(Icons.more_vert, size: 30),
           ),
         ],
@@ -113,11 +139,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 140, height: 140)),
             const Padding(
               padding: EdgeInsets.all(16.0),
-              child: Text('Tasks List',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold)),
+              child: Text(
+                'Tasks List',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
             Expanded(
               child: ListView(
@@ -141,23 +169,33 @@ class _MyHomePageState extends State<MyHomePage> {
                               : Colors.white,
                           boxShadow: [
                             BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(0, 3)),
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
                           ],
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Checkbox(
+                              value: item['Completed'],
+                              onChanged: (bool? value) {
+                                _toggleTaskCompletion(item['Id']);
+                              },
+                            ),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: Row(
                                 children: [
-                                  Text(item['Type'],
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.black54)),
+                                  Text(
+                                    item['Type'],
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black54),
+                                  ),
                                   const SizedBox(width: 16),
                                   Column(
                                     crossAxisAlignment:
@@ -186,21 +224,16 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             Row(
                               children: [
-                                Checkbox(
-                                  value: item['Completed'],
-                                  onChanged: (bool? value) {
-                                    _toggleTaskCompletion(item['Id']);
-                                  },
-                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10),
                                   child: Text(
-                                      DateFormat('MMMM d, yyyy')
-                                          .format(item['Due Date']),
-                                      style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w800)),
+                                    DateFormat('MMMM d, yyyy')
+                                        .format(item['Due Date']),
+                                    style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w800),
+                                  ),
                                 ),
                                 const SizedBox(height: 8),
                                 Container(
@@ -230,7 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Center(
               child: ElevatedButton(
-                onPressed: () {}, // Navigate to add task page
+                onPressed: () => _navigateToCreateTaskScreen(context),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFEE6F57),
                   fixedSize: const Size(200, 20),
@@ -245,6 +278,38 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 15),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// Dummy screen for task creation
+class CreateNewTaskScreen extends StatelessWidget {
+  const CreateNewTaskScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Create Task")),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Simulate task creation and return the new task
+            Navigator.pop(
+              context,
+              {
+                'Id': '5',
+                'Type': 'N',
+                'Title': 'New Task',
+                'Due Date': DateTime.now(),
+                'Color': Colors.purple,
+                'Description': 'A new task description',
+                'Completed': false,
+              },
+            );
+          },
+          child: const Text('Save Task'),
         ),
       ),
     );

@@ -2,69 +2,70 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 
-class CreateNewTaskScreen extends StatefulWidget {
-  @override
-  _CreateNewTaskScreenState createState() => _CreateNewTaskScreenState();
+void main() {
+  runApp(const MyApp());
 }
 
-class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
-  String? _selectedTask;
-  DateTime? _selectedDate;
-  final TextEditingController _descriptionController = TextEditingController();
-  bool _isCompleted = false; // Add this to handle task completion
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  final List<String> _tasks = [
-    'UI/UX App Design',
-    'Web Development',
-    'Mobile App Development'
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'todo-list',
+      debugShowCheckedModeBanner: false,
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final List<Map<String, dynamic>> items = [
+    {
+      'Id': "1",
+      'Type': 'U',
+      'Title': 'UI/UX App Design',
+      'Due Date': DateTime(2024, 9, 15),
+      'Color': Colors.red,
+      'Description':
+          'Design the user interface and user experience for the new app, focusing on usability and aesthetics.',
+      'Completed': false,
+    },
+    // Other initial tasks...
   ];
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-
-    if (pickedDate != null && pickedDate != _selectedDate) {
+  void _toggleTaskCompletion(String taskId) {
+    try {
       setState(() {
-        _selectedDate = pickedDate;
+        final task = items.firstWhere((task) => task['Id'] == taskId);
+        task['Completed'] = !task['Completed'];
       });
-    }
-  }
-
-  void _addTask() {
-    if (_selectedTask != null &&
-        _selectedDate != null &&
-        _descriptionController.text.isNotEmpty) {
-      // Create the new task including the 'completed' field
-      final newTask = {
-        'Id': DateTime.now().toString(), // Generating a unique ID for the task
-        'Type': 'U', // Assuming the type for now
-        'Title': _selectedTask!,
-        'Due Date': _selectedDate!,
-        'Color': Colors.blue, // You can add a color picker if needed
-        'Description': _descriptionController.text,
-        'Completed': _isCompleted // Add completed status
-      };
-
-      // Pass the task back to the home screen
-      context.pop(newTask);
-    } else {
-      // Show some validation message if the fields are incomplete
+    } catch (e) {
+      // Error handling: Log or display an error message
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill all the fields'),
-        ),
+        SnackBar(content: Text('Error toggling task completion: $e')),
       );
     }
   }
 
-  @override
-  void dispose() {
-    _descriptionController.dispose();
-    super.dispose();
+  void _createNewTask(Map<String, dynamic> newTask) {
+    try {
+      setState(() {
+        items.add(newTask);
+      });
+    } catch (e) {
+      // Error handling: Log or display an error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error creating new task: $e')),
+      );
+    }
   }
 
   @override
@@ -73,231 +74,181 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black54),
-          onPressed: () {
-            context.pop(); // Go back without adding a task
-          },
-        ),
-        actions: [
+        title: const Text('Todo List',
+            style: TextStyle(
+                fontSize: 16,
+                color: Colors.black54,
+                fontWeight: FontWeight.w600)),
+        centerTitle: true,
+        actions: <Widget>[
           PopupMenuButton<String>(
             onSelected: (value) {},
-            itemBuilder: (BuildContext context) {
-              return [
-                const PopupMenuItem<String>(
-                  value: 'Option 1',
-                  child: Text('Option 1'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'Option 2',
-                  child: Text('Option 2'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'Option 3',
-                  child: Text('Option 3'),
-                ),
-              ];
-            },
-            icon: const Icon(Icons.more_vert),
+            itemBuilder: (context) =>
+                ['Option 1', 'Option 2', 'Option 3'].map((choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList(),
+            icon: const Icon(Icons.more_vert, size: 30),
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Create new task',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: const Divider(
-                thickness: 1,
-                color: Color.fromARGB(255, 216, 214, 214),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Main task name',
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Center(
+                child: Image.asset('assets/todo-man.png',
+                    width: 140, height: 140)),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('Tasks List',
                   style: TextStyle(
-                      color: Color(0xFFEE6F57), fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
+                      fontSize: 16,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold)),
+            ),
+            Expanded(
+              child: ListView(
+                children: items.map((item) {
+                  return MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () => context.goNamed(
+                        "viewEditTask",
+                        pathParameters: {"id": item["Id"]},
+                        extra: item,
                       ),
-                    ],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: SizedBox(
-                    height: 40,
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        hint: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Select Task',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14),
-                          ),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 8),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: item['Completed']
+                              ? Colors.grey.shade300
+                              : Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3)),
+                          ],
                         ),
-                        value: _selectedTask,
-                        items: _tasks.map((String task) {
-                          return DropdownMenuItem<String>(
-                            value: task,
-                            child: Text(task),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedTask = newValue;
-                          });
-                        },
-                        icon: const SizedBox.shrink(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Checkbox(
+                              value: item['Completed'],
+                              onChanged: (bool? value) {
+                                _toggleTaskCompletion(item['Id']);
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Text(item['Type'],
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black54)),
+                                  const SizedBox(width: 16),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 100,
+                                        child: Text(
+                                          item['Title'],
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: item['Completed']
+                                                ? Colors.grey
+                                                : Colors.black87,
+                                            decoration: item['Completed']
+                                                ? TextDecoration.lineThrough
+                                                : TextDecoration.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Text(
+                                      DateFormat('MMMM d, yyyy')
+                                          .format(item['Due Date']),
+                                      style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w800)),
+                                ),
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: 3,
+                                  height: 34,
+                                  decoration: BoxDecoration(
+                                    color: item['Color'],
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: item['Color']!.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        offset: const Offset(1, 1),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Due date',
-                  style: TextStyle(
-                      color: Color(0xFFEE6F57), fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  height: 40,
-                  child: InkWell(
-                    onTap: () => _selectDate(context),
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            _selectedDate == null
-                                ? 'Select Date'
-                                : DateFormat('yyyy-MM-dd')
-                                    .format(_selectedDate!),
-                            style: TextStyle(
-                                color: _selectedDate == null
-                                    ? const Color.fromARGB(255, 109, 108, 108)
-                                    : const Color.fromARGB(255, 92, 92, 92),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14),
-                          ),
-                          const Icon(Icons.date_range_outlined,
-                              color: Color(0xFFEE6F57)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Description',
-                  style: TextStyle(
-                      color: Color(0xFFEE6F57), fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: TextFormField(
-                    controller: _descriptionController,
-                    maxLines: 2,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 15),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      hintText: 'Enter task description',
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _isCompleted,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _isCompleted = value!;
-                        });
-                      },
-                    ),
-                    const Text('Mark as Completed',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.center,
-                  child: SizedBox(
-                    width: 150,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFEE6F57)),
-                      onPressed: _addTask,
-                      child: const Text('Add Task',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ),
-              ],
+                  );
+                }).toList(),
+              ),
             ),
-          )
-        ],
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  final newTask = {
+                    'Id': DateTime.now().millisecondsSinceEpoch.toString(),
+                    'Type': 'New',
+                    'Title': 'New Task',
+                    'Due Date': DateTime.now().add(const Duration(days: 7)),
+                    'Color': Colors.purple,
+                    'Description': 'Description of the new task',
+                    'Completed': false,
+                  };
+                  _createNewTask(newTask);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFEE6F57),
+                  fixedSize: const Size(200, 20),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4.0)),
+                  elevation: 0,
+                ),
+                child: const Text('Create Task',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            const SizedBox(height: 15),
+          ],
+        ),
       ),
     );
   }
