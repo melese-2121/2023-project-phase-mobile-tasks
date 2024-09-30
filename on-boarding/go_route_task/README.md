@@ -76,6 +76,41 @@ To run the app on your local machine, follow these steps:
 
 Feel free to explore the `go_router` setup and how it integrates with the app’s navigation flow.
 
+## Architecture
+
+The project uses **Clean Architecture**, which is divided into three primary layers:
+
+1. **Presentation Layer**
+
+   - Responsible for the UI and managing user interactions.
+   - Consists of screens such as `HomeScreen`, `AddTaskScreen`, and `ViewEditTaskScreen`.
+   - Utilizes Flutter's widget system to build the user interface, including handling user events and navigation.
+
+2. **Domain Layer**
+
+   - Contains the business logic and core functionality.
+   - This layer defines essential entities like `Todo`, and use cases that interact with the data layer.
+
+3. **Data Layer**
+   - Manages data fetching, storage, and conversion between models and JSON.
+   - Defines the `TodoModel` class, which mirrors the `Todo` entity and includes methods like `fromJson` and `toJson` for JSON conversion.
+
+## Data Flow
+
+The application follows a clear and structured data flow:
+
+1. **User Interaction**: The user performs actions (e.g., creating or editing a task).
+2. **UI Event Handling**: The **Presentation Layer** captures these events and delegates them to the relevant use cases in the **Domain Layer**.
+3. **Data Processing**: The **Data Layer** manages data, whether it’s stored locally or retrieved via an API, and transforms it into Dart models like `TodoModel`.
+4. **State and UI Update**: Processed data is sent back to the **Presentation Layer**, updating the UI based on new data or user actions.
+
+## Features
+
+- **Task Creation**: Users can create new tasks with details such as title, type, due date, and description.
+- **Task Management**: Users can view and edit tasks, as well as mark tasks as completed.
+- **Smooth Transitions**: Custom page transitions with scale and fade animations are implemented for navigation between screens.
+- **JSON Conversion**: Tasks are stored as JSON objects, and conversion between JSON and Dart objects is handled using the `TodoModel`.
+
 ## Contribution
 
 Contributions are welcome!
