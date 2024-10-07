@@ -11,7 +11,7 @@ final GoRouter router = GoRouter(
       path: '/',
       pageBuilder: (context, state) => CustomTransitionPage(
         key: state.pageKey,
-        child: const MyHomePage(),
+        child: const HomePage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const beginScale = 0.85;
           const endScale = 1.0;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
-import '../../domain/entities/task.dart';
+import '../../domain/entities/todo.dart';
 import '../../domain/usecases/add_task_usecase.dart';
 
 class CreateNewTaskScreen extends StatefulWidget {
@@ -44,18 +44,18 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
     if (_selectedTask != null &&
         _selectedDate != null &&
         _descriptionController.text.isNotEmpty) {
-      final newTask = Task(
+      final newTask = Todo(
+        // Use the Todo class
         id: DateTime.now().toString(),
         title: _selectedTask!,
         description: _descriptionController.text,
         dueDate: _selectedDate!,
         isCompleted: _isCompleted,
-        type: 'U', // Assuming the type
-        color: Colors.blue.value, // Store color as an integer
       );
 
-      widget.addTaskUseCase.execute(newTask);
-      context.pop();
+      widget.addTaskUseCase
+          .execute(newTask); // Ensure AddTaskUseCase takes a Todo
+      context.pop(); // Navigate back to the previous screen
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

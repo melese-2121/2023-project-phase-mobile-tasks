@@ -1,12 +1,11 @@
-import '../entities/task.dart';
+import '../entities/todo.dart';
 
 class AddTaskUseCase {
-  final List<Task> _taskList;
+  final List<Todo> _todoList; // Ensure to use Todo instead of Task
 
-  AddTaskUseCase(this._taskList);
+  AddTaskUseCase(this._todoList);
 
-  void execute(Task task) {
-    // Add the task to the list
-    _taskList.add(task);
+  void execute(Todo task) {
+    _todoList.add(task);
   }
 }
