@@ -1,13 +1,13 @@
-// data/repositories/todo_repository_impl.dart
-import 'package:your_project/core/network/network_info.dart';
+import '../../../../core/network/network_info.dart';
 import '../../domain/entities/todo.dart';
 import '../../domain/repositories/todo_repository.dart';
-import '../datasources/todo_remote_data_source.dart';
+import '../datasources/todo_remote_data_source.dart' as remote;
+import '../datasources/todo_local_data_source.dart' as local;
 
 class TodoRepositoryImpl implements TodoRepository {
-  final TodoRemoteDataSource remoteDataSource;
-  final TodoLocalDataSource localDataSource;
-  final NetworkInfo networkInfo;
+  final remote.TodoRemoteDataSource remoteDataSource;
+  final local.TodoLocalDataSource localDataSource;
+  final NetworkInfo networkInfo; // Use your custom NetworkInfo class
 
   TodoRepositoryImpl({
     required this.remoteDataSource,
@@ -18,12 +18,15 @@ class TodoRepositoryImpl implements TodoRepository {
   @override
   Future<List<Todo>> getAllTodos() async {
     if (await networkInfo.isConnected) {
+      // Using your custom NetworkInfo method
+      // Fetch from remote if online
       final todos = await remoteDataSource.fetchTodosFromServer();
-      todos.forEach(localDataSource.addTodoToDb); // Cache the remote data
+      // Optionally, cache the remote data locally
+      todos.forEach(localDataSource.addTodoToDb);
       return todos;
     } else {
-      return await localDataSource
-          .fetchTodosFromDb(); // Fetch from local if offline
+      // Fetch from local storage if offline
+      return await localDataSource.fetchTodosFromDb();
     }
   }
 
@@ -32,7 +35,7 @@ class TodoRepositoryImpl implements TodoRepository {
     if (await networkInfo.isConnected) {
       await remoteDataSource.addTodoToServer(todo);
     }
-    await localDataSource.addTodoToDb(todo); // Always add to local storage
+    await localDataSource.addTodoToDb(todo);
   }
 
   @override
@@ -40,8 +43,7 @@ class TodoRepositoryImpl implements TodoRepository {
     if (await networkInfo.isConnected) {
       await remoteDataSource.deleteTodoFromServer(id);
     }
-    await localDataSource
-        .deleteTodoFromDb(id); // Always delete from local storage
+    await localDataSource.deleteTodoFromDb(id);
   }
 
   @override
@@ -49,6 +51,6 @@ class TodoRepositoryImpl implements TodoRepository {
     if (await networkInfo.isConnected) {
       await remoteDataSource.updateTodoOnServer(todo);
     }
-    await localDataSource.updateTodoInDb(todo); // Always update local storage
+    await localDataSource.updateTodoInDb(todo);
   }
 }
